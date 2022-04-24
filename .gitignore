@@ -1,0 +1,14 @@
+.idea
+*.iml
+out
+gen
+data
+build
+dist
+/build/
+/data/
+/dist/
+/__pycache__/
+
+*.pickle
+*.txt
