@@ -14,3 +14,9 @@ columns=['team1', 'team2', 'rang1', 'rang2', 'stars',
 'rating24', 'kd24', 'dpr24', 'kpr24', 'apr24', 'depr24', 'ratingMap24', 'kdMap24', 'dprMap24', 'kprMap24', 'aprMap24', 'deprMap24',
 'rating25', 'kd25', 'dpr25', 'kpr25', 'apr25', 'depr25', 'ratingMap25', 'kdMap25', 'dprMap25', 'kprMap25', 'aprMap25', 'deprMap25',
 ])
+
+#testTable = pd.DataFrame(data=None, index=None,
+columns=['link', 'date', 'stars',
+         'map1', 'score1', 'map2', 'score2', 'map3', 'score3', 'map4', 'score4', 'map5', 'score5',
+         'team1', 'team2',
+         'p11', 'p12', 'p13', 'p14', 'p15', 'p21', 'p22', 'p23', 'p24', 'p25']#)

@@ -9,6 +9,9 @@ dist
 /data/
 /dist/
 /__pycache__/
+.gitattributes
 
 *.pickle
 *.txt
+*.xlsx
+*.html
