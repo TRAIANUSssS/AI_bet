@@ -6,6 +6,7 @@ import sys
 from collections import OrderedDict
 import pandas as pd
 import numpy as np
+from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
@@ -166,8 +167,8 @@ def connectData():
             players += dadaArray[i][6]
         else:
             line = dadaArray[i][6]
-            #print(len(line), 10-len(line))
-            for j in range(10-len(line)):
+            # print(len(line), 10-len(line))
+            for j in range(10 - len(line)):
                 line.append(None)
             players += line
         sys.stdout.write("\r{0}".format(f'{i}/{len(dadaArray)}'))
@@ -195,11 +196,17 @@ def connectData():
 
     # create excel table
     allItemsPD = pd.DataFrame(editAllData, columns=constants.columns, index=None)
-    allItemsPD.to_excel('Test_table.xlsx')
+    # allItemsPD.to_excel('Test_table.xlsx')
+    print('\n Saving into pickle file')
+    allItemsPD.to_pickle("tempData.pkl")
     print('\n done')
 
 
-def getRang(URL):
+def getRang():
+    pass
+
+
+def getRangOld(URL):
     """
 
     :param URL: for team
@@ -216,11 +223,84 @@ def getRang(URL):
     #     print(i)
 
 
+def getPlayersStat():
+    data = getPickleData("tempData.pkl")
+    data = data.to_numpy()[:3:]
+
+    dataWithPlayersStats = pd.DataFrame(data=None, index=None, columns=constants.columnsPlayersStatExcel)
+
+    for match in range(len(data)):
+        # try:
+        maps = data[match][3:12:2]
+        score = data[match][4:13:2]
+        players = data[match][15:25]
+
+        playersData = []
+        # if teams played with full line-up
+        if len(players) == 10:
+            # go through each map
+            for currMap in range(len(maps)):
+                # if map is normal (not like TBD or default)
+                if maps[currMap] in constants.MAPS_DICT:
+                    print(maps[currMap])
+                    # get current score for map
+                    currScore = list(map(int, score[currMap].split(' ')))
+                    # if map ended
+                    if sum(currScore) >= 16:
+                        playersData.append(playerPage(players, data[1], maps[currMap]))
+
+            # if match was played it get all stat from past 3 month
+            if len(playersData) != 0:
+                playersData = playerPage(players, data[1]) + playersData
+                # score[map] =
+        print(maps)
+        print(score)
+        print(players)
+        print(playersData)
+        print("-----------=================--------------")
+        # except Exception as ex:
+        #     print(ex)
+
+
+def playerPage(players, matchDate, currMap=None):
+    matchDate = getDate(matchDate) if currMap == None else f'{getDate(matchDate)}&maps={constants.HLTV_MAPS_DICT[currMap]}'
+    players = list(map(str, players.split('/')))[-2:]
+    players = players[0]+'/'+players[1]
+    link = constants.PLAYERS_STAT+players+matchDate
+    print(link)
+
+
+def getDate(matchDate):
+    start = int(matchDate) // 1000
+    end = int(matchDate) // 1000 - (86400 * 90)
+
+    start = time.strftime('%Y-%m-%d', time.localtime(start))
+    end = time.strftime('%Y-%m-%d', time.localtime(end))
+    line = f"?startDate={end}&endDate={start}"
+
+    #print(line)
+    return line
+
+
+def test():
+    data = getPickleData("tempData.pkl")
+    data = list(data.to_numpy()[:3:])
+    newdata = pd.DataFrame(data=None, index=None, columns=constants.columns)
+    for i in range(len(data)):
+        newdata.loc[i] = data[i]
+    print(type(newdata))
+    print(newdata)
+    # data.to_excel('Test_table1.xlsx')
+
+
 if __name__ == "__main__":
     np.set_printoptions(linewidth=3000)
     # getRang("https://www.hltv.org/team/10672/vertex")
     # getAllMatches("https://www.hltv.org/results?offset=")
     # getPickleData('allMatchLinks.pickle')
     # getMatchInfo()
-    connectData()
+    # connectData()
+    # getPlayersStat()
+    playerPage('https://www.hltv.org/player/20384/zannn','1650441600000', 'Overpass')
+    # test()
     # getPickleData(os.path.join('MatchData',f'allMatchesInfo-10.pickle'), True)
