@@ -37,7 +37,7 @@ if __name__ == "__main__":
     # getPickleData('allMatchLinks.pickle')
     # getMatchInfo()
     # connectData()
-    Players.getPlayersStat()
+    Players.getPlayersStat(20, 10000)
     #Players.converToExcel()
     # test()
     # getPickleData(os.path.join('MatchData',f'allMatchesInfo-10.pickle'), True)

@@ -3,7 +3,7 @@ import time
 
 def getDate(matchDate):
     #print(matchDate)
-    start = int(matchDate) // 1000
+    start = int(matchDate) // 1000 - 86400
     end = int(matchDate) // 1000 - (86400 * 90)
 
     start = time.strftime('%Y-%m-%d', time.localtime(start))

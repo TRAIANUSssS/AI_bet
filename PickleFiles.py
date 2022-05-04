@@ -102,3 +102,18 @@ def connectData():
     print('\n Saving into pickle file')
     allItemsPD.to_pickle("tempData.pkl")
     print('\n done')
+
+
+def converToExcel():
+    data = []
+    for i in range(10,41):
+        try:
+            data += getPickleData(os.path.join('PlayersStats', f'PlayersStats-{i}.pickle'))
+        except:
+            pass
+    dataWithPlayersStats = pd.DataFrame(data=data, index=None, columns=constants.columnsPlayersStatExcel)
+    dataWithPlayersStats.to_excel('Test_table_players_stats.xlsx')
+
+
+if __name__ == "__main__":
+    converToExcel()
